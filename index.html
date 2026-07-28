@@ -195,7 +195,7 @@
         <div class="story-a" id="story2">–</div>
       </div>
       <div class="story-step">
-        <div class="story-q">Step 3　照規定，打這麼久至少要花多少？（及格線）</div>
+        <div class="story-q">Step 3　照規定，客戶這次的廣告走期至少要花多少？（及格線）</div>
         <div class="story-a" id="story3">–</div>
       </div>
       <div class="story-step">
@@ -240,7 +240,7 @@ const REGIONS = [
 const regionSel = document.getElementById('region');
 REGIONS.forEach(([name,val])=>{
   const opt = document.createElement('option');
-  opt.value = val; opt.textContent = `${name}（門檻 ${val.toLocaleString()} 元）`;
+  opt.value = val; opt.textContent = `${name}（單月門檻 ${val.toLocaleString()} 元）`;
   regionSel.appendChild(opt);
 });
 
