@@ -208,7 +208,7 @@
         <div class="story-a" id="story2">–</div>
       </div>
       <div class="story-step">
-        <div class="story-q">Step 3　照規定，這筆委刊金額至少要達到多少？（及格線＝單月門檻）</div>
+        <div class="story-q">Step 3　照規定，這筆委刊金額至少要達到多少？（及格線＝走期月數 × 單月門檻）</div>
         <div class="story-a" id="story3">–</div>
       </div>
       <div class="story-step">
@@ -226,7 +226,7 @@
     </div>
 
     <div class="rules">
-      <b>換算邏輯：</b>及格線＝地區單月門檻（固定金額，不隨走期天數打折）；只要整張委刊單金額達到單月門檻，就符合贈送資格。<br>
+      <b>換算邏輯：</b>及格線＝走期涵蓋的月數（走期週數÷4）× 地區單月門檻，也就是整張單平均下來每個月都要達到單月門檻。<br>
       <b>可贈送週數：</b>客戶預算每達到「一個月門檻」的倍數，就送1週，最多送4週，且不超過走期本身的週數。<br>
       單一委刊單購買至少滿四週。
     </div>
@@ -330,7 +330,7 @@ function calc(){
 
   const days = Math.round((end - start)/86400000) + 1;
   const weeksCalc = days/7;
-  const requiredAmount = threshold; // 及格線＝固定單月門檻，不隨走期天數打折
+  const requiredAmount = weeksCalc/4 * threshold; // 及格線＝走期涵蓋的月數 × 單月門檻（按比例）
   const qualifies = budget >= requiredAmount;
   const rawGiftWeeks = Math.floor(budget/threshold) || 0;
   const cappedByFour = Math.min(4, rawGiftWeeks);
@@ -341,7 +341,7 @@ function calc(){
 
   document.getElementById('story1').textContent = `${days} 天 → 約 ${fmt(weeksCalc)} 週`;
   document.getElementById('story2').textContent = `門檻 ${fmtMoney(threshold)}／月 → 一週 ${fmtMoney(weeklyRate)}`;
-  document.getElementById('story3').textContent = `${fmtMoney(requiredAmount)}（固定＝單月門檻，與走期長短無關）`;
+  document.getElementById('story3').textContent = `${fmt(weeksCalc/4)} 個月 × ${fmtMoney(threshold)} = ${fmtMoney(requiredAmount)}`;
 
   const story6wrap = document.getElementById('story6wrap');
   const actualWeekly = budget / weeksCalc;
@@ -355,7 +355,7 @@ function calc(){
     document.getElementById('story4').textContent =
       `${fmtMoney(budget)} ÷ ${fmt(weeksCalc)} 週 = 單週實際 ${fmtMoney(actualWeekly)}`;
     document.getElementById('story5').textContent =
-      `預算 ${fmtMoney(budget)} → 比及格線多 ${fmtMoney(Math.abs(diff))} → ✓ 符合資格`;
+      `預算 ${fmtMoney(budget)} vs 及格線 ${fmtMoney(requiredAmount)} → 多 ${fmtMoney(Math.abs(diff))} → ✓ 符合資格`;
     document.getElementById('story6').textContent = cappedByFour > campaignWeeksFloor
       ? `${fmtMoney(budget)} ÷ ${fmtMoney(threshold)} = ${fmt(multiple)} 倍 → 原可送 ${cappedByFour} 週，但走期只有 ${campaignWeeksFloor} 週 → 最多送 ${giftWeeks} 週`
       : `${fmtMoney(budget)} ÷ ${fmtMoney(threshold)} = ${fmt(multiple)} 倍 → 送出 ${giftWeeks} 週${multiple>4?'（已達上限4週）':''}`;
@@ -364,7 +364,7 @@ function calc(){
     document.getElementById('story4').textContent =
       `${fmtMoney(budget)} ÷ ${fmt(weeksCalc)} 週 = 單週實際 ${fmtMoney(actualWeekly)}`;
     document.getElementById('story5').textContent =
-      `預算 ${fmtMoney(budget)} → 比及格線少 ${fmtMoney(Math.abs(diff))} → ✗ 不符合資格`;
+      `預算 ${fmtMoney(budget)} vs 及格線 ${fmtMoney(requiredAmount)} → 少 ${fmtMoney(Math.abs(diff))} → ✗ 不符合資格`;
     document.getElementById('story6').textContent = `未達門檻，不贈送`;
     story6wrap.classList.add('no');
   }
